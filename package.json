@@ -5,7 +5,9 @@
   "type": "module",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node backend/app.js",
+    "dev": "NODE_ENV=DEVELOPMENT nodemon backend/app.js",
+    "prod": "NODE_ENV=PRODUCTION nodemon backend/app.js"
   },
   "author": "Rudolph Harry",
   "license": "ISC",
