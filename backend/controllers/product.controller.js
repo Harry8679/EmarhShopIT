@@ -13,3 +13,16 @@ export const newProduct = asyncHandler(async(req, res) => {
 
     res.status(200).json({ product });
 });
+
+/*----------------- Get Single product details ----------------- */
+export const getProductDetails = asyncHandler(async(req, res) => {
+    const product = await Product.findById(req?.params?.id);
+
+    if (!product) {
+        return res.status(404).json({
+            error: 'Product not found'
+        });
+    }
+
+    res.status(200).json({ product });
+});
