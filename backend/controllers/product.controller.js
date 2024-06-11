@@ -26,3 +26,16 @@ export const getProductDetails = asyncHandler(async(req, res) => {
 
     res.status(200).json({ product });
 });
+
+/*----------------- Update Product Details ----------------- */
+export const updateProduct = asyncHandler(async(req, res) => {
+    let product = await Product.findById(req?.params?.id);
+
+    if (!product) {
+        return res.status(404).json({ error: 'Product not found' });
+    }
+
+    product = await Product.findByIdAndUpdate(req?.params?.id, req.body, { new: true });
+
+    res.status(200).json({ product });
+});
