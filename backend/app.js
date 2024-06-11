@@ -9,6 +9,8 @@ const app = express();
 // Connecting to database
 connectDatabase();
 
+app.use(express.json());
+
 app.use('/api/v1/products', productsRoute);
 
 const port = process.env.PORT || 6001;
