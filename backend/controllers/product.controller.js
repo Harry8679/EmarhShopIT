@@ -3,9 +3,8 @@ import Product from '../models/product.model.js';
 
 /*----------------- Get All Products ----------------- */
 export const getAllProducts = asyncHandler(async(req, res) => {
-    res.status(200).json({
-        message: 'All products'
-    });
+    const products = await Product.find();
+    res.status(200).json({ products });
 });
 
 /*----------------- Create a Product ----------------- */
