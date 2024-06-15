@@ -1,11 +1,15 @@
 import asyncHandler from 'express-async-handler';
 import Product from '../models/product.model.js';
 import ErrorHandler from '../utils/errorHandler.util.js';
+import APIFilters from '../utils/apiFilters.js';
 
 /*----------------- Get All Products ----------------- */
 export const getAllProducts = asyncHandler(async(req, res) => {
-    const products = await Product.find();
-    res.status(200).json({ products });
+    const apiFilters = new APIFilters(Product, req.query).search();
+    // const products = await Product.find();
+    let products = await apiFilters.query;
+    let filteredProducts = products.length;
+    res.status(200).json({ filteredProducts ,products });
 });
 
 /*----------------- Create a Product ----------------- */
