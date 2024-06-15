@@ -12,6 +12,12 @@ export default (err, req, res, next) => {
         error = new ErrorHandler(message, 404);
     }
 
+    // Handle Validation Error
+    if (err.name === 'ValidationError') {
+        const message = Object.values(err.errors).map((value) => value.message);
+        error = new ErrorHandler(message, 400);
+    }
+
     if (process.env.NODE_ENV === 'DEVELOPMENT') {
         res.status(error.statusCode).json({
             message: error.message,
