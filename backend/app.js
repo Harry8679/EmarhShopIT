@@ -19,6 +19,15 @@ app.use(errorMiddleware);
 
 const port = process.env.PORT || 6001;
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`Server started on PORT ${port} in ${process.env.NODE_ENV}`);
+});
+
+// Handle Unhandled Promise rejections
+process.on('unhandledRejection', (err) => {
+    console.log(`ERROR: ${err}`);
+    console.log('Shutting down server due to Unhandled Promise Rejection');
+    server.close(() => {
+        process.exit(1);
+    });
 });
