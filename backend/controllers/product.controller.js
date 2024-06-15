@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import Product from '../models/product.model.js';
+import ErrorHandler from '../utils/errorHandler.util.js';
 
 /*----------------- Get All Products ----------------- */
 export const getAllProducts = asyncHandler(async(req, res) => {
@@ -15,13 +16,14 @@ export const newProduct = asyncHandler(async(req, res) => {
 });
 
 /*----------------- Get Single product details ----------------- */
-export const getProductDetails = asyncHandler(async(req, res) => {
+export const getProductDetails = asyncHandler(async(req, res, next) => {
     const product = await Product.findById(req?.params?.id);
 
     if (!product) {
-        return res.status(404).json({
-            error: 'Product not found'
-        });
+        return next(new ErrorHandler('Product not found', 404));
+        // return res.status(404).json({
+        //     error: 'Product not found'
+        // });
     }
 
     res.status(200).json({ product });
