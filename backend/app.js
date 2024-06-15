@@ -4,6 +4,13 @@ import productsRoute from './routes/product.route.js';
 import { connectDatabase } from './config/dbConnect.js';
 import errorMiddleware from './middlewares/error.middleware.js';
 
+// Handle Uncaught exceptions
+process.on('uncaughtException', (err) => {
+    console.log(`ERROR: ${err}`);
+    console.log('Shutting down due to uncaught exception');
+    process.exit(1);
+});
+
 dotenv.config({ path: 'backend/.env' });
 const app = express();
 
@@ -11,6 +18,8 @@ const app = express();
 connectDatabase();
 
 app.use(express.json());
+
+// console.log(hello);
 
 app.use('/api/v1/products', productsRoute);
 
