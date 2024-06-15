@@ -4,6 +4,20 @@ export default (err, req, res, next) => {
         message: err?.message || 'Internal Server Error'
     };
 
+    if (process.env.NODE_ENV === 'DEVELOPMENT') {
+        res.status(error.statusCode).json({
+            message: error.message,
+            error: error,
+            stack: err?.stack
+        });
+    }
+
+    if (process.env.NODE_ENV === 'PRODUCTION') {
+        res.status(error.statusCode).json({
+            message: error.message
+        });
+    }
+
     res.status(error.statusCode).json({
         message: error.message,
     });
