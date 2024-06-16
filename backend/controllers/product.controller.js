@@ -5,11 +5,21 @@ import APIFilters from '../utils/apiFilters.js';
 
 /*----------------- Get All Products ----------------- */
 export const getAllProducts = asyncHandler(async(req, res) => {
+    const resPerPage = 4;
     const apiFilters = new APIFilters(Product, req.query).search().filters();
-    // const products = await Product.find();
+
     let products = await apiFilters.query;
-    let filteredProducts = products.length;
-    res.status(200).json({ filteredProducts ,products });
+    let filteredProductsCount = products.length;
+
+    apiFilters.pagination(resPerPage);
+    products = await apiFilters.query.clone();
+    // const products = await Product.find();
+    res.status(200).json({
+        success: true,
+        resPerPage,
+        filteredProductsCount,
+        products
+    });
 });
 
 /*----------------- Create a Product ----------------- */
