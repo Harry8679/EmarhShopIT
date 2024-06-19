@@ -1,6 +1,7 @@
-const asyncHandler = require('express-async-handler');
-const User = require('../models/user.model');
-const ErrorHandler = require('../utils/errorHandler.util');
+import asyncHandler from 'express-async-handler';
+import User from '../models/user.model.js';
+import ErrorHandler from '../utils/errorHandler.util.js';
+// import User from '../models/user.model.js';
 
 /*----------------- Register an Account ----------------- */
 export const register = asyncHandler(async(req, res) => {
