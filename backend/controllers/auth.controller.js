@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import User from '../models/user.model.js';
 import ErrorHandler from '../utils/errorHandler.util.js';
+import sendToken from '../utils/sendToken.js';
 // import User from '../models/user.model.js';
 
 /*----------------- Register an Account ----------------- */
@@ -12,7 +13,8 @@ export const register = asyncHandler(async(req, res) => {
 
     const token = user.getJwtToken();
 
-    res.status(201).json({ token });
+    // res.status(201).json({ token });
+    sendToken(user, 201, res);
 });
 
 /*----------------- Login ----------------- */
@@ -37,7 +39,5 @@ export const loginUser = asyncHandler(async(req, res, next) => {
         return next(new ErrorHandler('Invalid or password', 401));
     }
 
-    const token = user.getJwtToken();
-
-    res.status(201).json({ token });
+    sendToken(user, 201, res);
 });
