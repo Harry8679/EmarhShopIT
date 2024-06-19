@@ -63,3 +63,5 @@ userSchema.methods.getResetPasswordToken = function() {
 }
 
 mongoose.model('User', userSchema);
+
+module.exports = User;
