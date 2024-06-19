@@ -1,12 +1,9 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const productsRoute = require('')
-// import express from 'express';
-// import dotenv from 'dotenv';
-// import productsRoute from './routes/product.route.js';
-// import authRoute from './routes/auth.route.js';
-// import { connectDatabase } from './config/dbConnect.js';
-// import errorMiddleware from './middlewares/error.middleware.js';
+import express from 'express';
+import dotenv from 'dotenv';
+import productsRoute from './routes/product.route.js';
+import authRoute from './routes/auth.route.js';
+import { connectDatabase } from './config/dbConnect.js';
+import errorMiddleware from './middlewares/error.middleware.js';
 
 // Handle Uncaught exceptions
 process.on('uncaughtException', (err) => {
