@@ -39,4 +39,25 @@ const authorizeRoles = (...roles) => {
     };
 };
 
-module.exports = { protected, authorizeRoles };
+// Check if user is authenticated or not
+const isAuthenticated = asyncHanlder(async(req, res, next) => {
+    // const { token } = req.cookies;
+    const token = req.cookies.token;
+
+    console.log('token', token);
+
+    if (!token) {
+        console.log('================================================================');
+        console.log('token if not authenticated');
+        // return next(new ErrorHandler('Login first to success this resource', 401));
+    }
+
+    console.log('after');
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log('decoded', decoded);
+    req.user = await User.findById(decoded.id);
+    next();
+});
+
+module.exports = { isAuthenticated, protected, authorizeRoles };
