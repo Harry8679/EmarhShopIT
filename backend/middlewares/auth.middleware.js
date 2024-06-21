@@ -1,13 +1,14 @@
-const ErrorHandler = require('../utils/errorHandler.util');
-const jwt = require('jsonwebtoken');
-const User = require('../models/user.model');
+import ErrorHandler from '../utils/errorHandler.util.js';
+import jwt from 'jsonwebtoken';
+import User from '../models/user.model.js';
 
-const asyncHanlder = require('express-async-handler');
+import asyncHanlder from 'express-async-handler';
 
-const protected = asyncHanlder(async (req, res, next) => {
+export const protectedRoute = asyncHanlder(async (req, res, next) => {
     try {
         const token = req.cookies.token;
         if (!token) {
+            console.log('Pas autorisé car pas de token');
             res.status(401);
             throw new ErrorHandler('Not authorized, please login');
         }
@@ -29,7 +30,7 @@ const protected = asyncHanlder(async (req, res, next) => {
     }
 });
 
-const authorizeRoles = (...roles) => {
+export const authorizeRoles = (...roles) => {
     return (req, res, next) => {
         if (!roles.includes(req.user.role)) {
             return next(new ErrorHandler(`Role ${req.user.role} is not allowed to access this resource.`, 403));
@@ -40,24 +41,39 @@ const authorizeRoles = (...roles) => {
 };
 
 // Check if user is authenticated or not
-const isAuthenticated = asyncHanlder(async(req, res, next) => {
-    // const { token } = req.cookies;
-    const token = req.cookies.token;
-
-    console.log('token', token);
+export const isAuthenticated = asyncHanlder(async (req, res, next) => {
+    console.log('Checking authentication');
+    const { token } = req.cookies;
+    // console.log('token: ' + token);
 
     if (!token) {
-        console.log('================================================================');
-        console.log('token if not authenticated');
-        // return next(new ErrorHandler('Login first to success this resource', 401));
+        console.log('No token found');
+        return next(new ErrorHandler('Login first to access this resource', 401));
     }
 
-    console.log('after');
+    try {
+        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+            if (err) {
+                console.log(err);
+            }
+        });
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        console.log(decoded);
+        req.user = await User.findById(decoded.id);
+        
+        if (!req.user) {
+            console.log('User not found');
+            return next(new ErrorHandler('User not found', 404));
+        }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log('decoded', decoded);
-    req.user = await User.findById(decoded.id);
-    next();
+        console.log('User authenticated');
+        next();
+    } catch (error) {
+        console.log('Token verification failed');
+        return next(new ErrorHandler('Not authorized, token failed', 401));
+    }
 });
 
-module.exports = { isAuthenticated, protected, authorizeRoles };
+
+// module.exports = { isAuthenticated, protectedRoute, authorizeRoles };
+// export default { isAuthenticated, protectedRoute, authorizeRoles };

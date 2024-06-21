@@ -39,5 +39,5 @@ export const loginUser = asyncHandler(async(req, res, next) => {
         return next(new ErrorHandler('Invalid or password', 401));
     }
 
-    sendToken(user, 201, res);
+    sendToken(user, 200, res);
 });

@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 import productsRoute from './routes/product.route.js';
 import authRoute from './routes/auth.route.js';
 import { connectDatabase } from './config/dbConnect.js';
@@ -19,6 +20,7 @@ const app = express();
 connectDatabase();
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use('/api/v1/products', productsRoute);
 app.use('/api/v1/users', authRoute);
