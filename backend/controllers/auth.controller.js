@@ -59,7 +59,7 @@ export const logout = asyncHandler(async(req, res, next) => {
 /*----------------- Forgot Password ----------------- */
 export const forgotPassword = asyncHandler(async(req, res, next) => {
     // Find user in the database
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
         return next(new ErrorHandler('User not found with this email', 401));
@@ -68,13 +68,10 @@ export const forgotPassword = asyncHandler(async(req, res, next) => {
     // Get Reset Password Token
     const resetToken = user.getResetPasswordToken();
 
-    user.save();
+    await user.save();
 
     // Create reset password url
     const resetUrl = `${process.env.FRONTEND_URL}/api/v1/password/reset${resetToken}`;
-
-    // Check if password is correct
-    const isPasswordMatched = await user.comparePassword(password);
 
     const message = getResetPasswordToken(user?.name, resetUrl);
 
