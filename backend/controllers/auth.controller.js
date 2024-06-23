@@ -2,6 +2,8 @@ import asyncHandler from 'express-async-handler';
 import User from '../models/user.model.js';
 import ErrorHandler from '../utils/errorHandler.util.js';
 import sendToken from '../utils/sendToken.js';
+import { sendEmail } from '../utils/sendEmail.util.js';
+// import 
 // import User from '../models/user.model.js';
 
 /*----------------- Register an Account ----------------- */
@@ -52,4 +54,47 @@ export const logout = asyncHandler(async(req, res, next) => {
     res.status(200).json({
         message: 'Logged out'
     });
+});
+
+/*----------------- Forgot Password ----------------- */
+export const forgotPassword = asyncHandler(async(req, res, next) => {
+    // Find user in the database
+    const user = await User.findOne({ email }).select('+password');
+
+    if (!user) {
+        return next(new ErrorHandler('User not found with this email', 401));
+    }
+
+    // Get Reset Password Token
+    const resetToken = user.getResetPasswordToken();
+
+    user.save();
+
+    // Create reset password url
+    const resetUrl = `${process.env.FRONTEND_URL}/api/v1/password/reset${resetToken}`;
+
+    // Check if password is correct
+    const isPasswordMatched = await user.comparePassword(password);
+
+    const message = getResetPasswordToken(user?.name, resetUrl);
+
+    try {
+        await sendEmail({
+            email: user.email,
+            subject: 'ShopIT Password Recovery',
+            message,
+        });
+
+        res.status(200).json({
+            message: `Email sent to ${user.email}`
+        });
+    } catch (error) {
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+
+        await user.save();
+        return next(new ErrorHandler(error?.message, 500));
+    }
+
+    sendToken(user, 200, res);
 });

@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config({ path: 'backend/.env' });
 
 
-const sendEmail = async(options) => {
+export const sendEmail = async(options) => {
     const transport = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
         // host: "sandbox.smtp.mailtrap.io",
@@ -26,5 +26,3 @@ const sendEmail = async(options) => {
 
     await transport.sendMail(message);
 };
-
-module.exports = { sendEmail };
