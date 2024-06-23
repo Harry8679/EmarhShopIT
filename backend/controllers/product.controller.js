@@ -24,6 +24,9 @@ export const getAllProducts = asyncHandler(async(req, res) => {
 
 /*----------------- Create a Product ----------------- */
 export const newProduct = asyncHandler(async(req, res) => {
+    req.body.user = req.user._id;
+    console.log('req.body.user', req.body.user);
+    // console.log('req.user product controller :', req.user);
     const product = await Product.create(req.body);
 
     res.status(200).json({ product });

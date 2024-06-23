@@ -4,8 +4,8 @@ import { authorizeRoles, isAuthenticated } from '../middlewares/auth.middleware.
 
 const productsRoute = express.Router();
 
-productsRoute.get('/', isAuthenticated, authorizeRoles('admin'), getAllProducts);
-productsRoute.post('/admin', newProduct);
+productsRoute.get('/', getAllProducts);
+productsRoute.post('/admin', isAuthenticated, authorizeRoles('admin'), newProduct);
 productsRoute.get('/:id', getProductDetails);
 productsRoute.put('/:id', updateProduct);
 productsRoute.delete('/:id', deleteProduct);
