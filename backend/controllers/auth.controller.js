@@ -57,7 +57,7 @@ export const logout = asyncHandler(async(req, res, next) => {
 });
 
 /*----------------- Forgot Password ----------------- */
-export const forgotPassword = asyncHandler(async(req, res, next) => {
+export const forgotPassword = asyncHandler(async (req, res, next) => {
     // Find user in the database
     const user = await User.findOne({ email: req.body.email });
 
@@ -66,20 +66,19 @@ export const forgotPassword = asyncHandler(async(req, res, next) => {
     }
 
     // Get Reset Password Token
-    /** @var $user User */
     const resetToken = user.getResetPasswordToken();
 
     await user.save();
 
     // Create reset password url
-    const resetUrl = `${process.env.FRONTEND_URL}/api/v1/password/reset${resetToken}`;
+    const resetUrl = `${process.env.FRONTEND_URL}/api/v1/password/reset/${resetToken}`;
 
-    const message = getResetPasswordToken(user?.name, resetUrl);
+    const message = `Hello ${user.name},\n\nYou have requested to reset your password. Please click on the following link, or paste it into your browser to complete the process:\n\n${resetUrl}\n\nIf you did not request this, please ignore this email and your password will remain unchanged.\n\nBest regards,\nYour Company`;
 
     try {
         await sendEmail({
             email: user.email,
-            subject: 'ShopIT Password Recovery',
+            subject: 'Password Recovery',
             message,
         });
 
@@ -91,8 +90,7 @@ export const forgotPassword = asyncHandler(async(req, res, next) => {
         user.resetPasswordExpire = undefined;
 
         await user.save();
-        return next(new ErrorHandler(error?.message, 500));
-    }
 
-    sendToken(user, 200, res);
+        return next(new ErrorHandler(error.message, 500));
+    }
 });
