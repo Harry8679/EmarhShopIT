@@ -54,9 +54,11 @@ userSchema.methods.comparePassword = async function(enteredPassword) {
 // Generate password reset token
 userSchema.methods.getResetPasswordToken = function() {
     // Generate token
-    const resetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+    const resetToken = crypto.randomBytes(20).toString('hex');
 
-    // Set token expire time
+    // Hash and set to resetPasswordToken field
+    this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+
     this.resetPasswordExpire = Date.now() + 30 * 60 * 1000;
 
     return resetToken;

@@ -62,10 +62,11 @@ export const forgotPassword = asyncHandler(async(req, res, next) => {
     const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
-        return next(new ErrorHandler('User not found with this email', 401));
+        return next(new ErrorHandler('User not found with this email', 404));
     }
 
     // Get Reset Password Token
+    /** @var $user User */
     const resetToken = user.getResetPasswordToken();
 
     await user.save();
