@@ -3,6 +3,7 @@ import User from '../models/user.model.js';
 import ErrorHandler from '../utils/errorHandler.util.js';
 import sendToken from '../utils/sendToken.js';
 import { sendEmail } from '../utils/sendEmail.util.js';
+import { getResetPasswordTemplate } from '../utils/emailTemplate.util.js';
 // import 
 // import User from '../models/user.model.js';
 
@@ -73,7 +74,7 @@ export const forgotPassword = asyncHandler(async (req, res, next) => {
     // Create reset password url
     const resetUrl = `${process.env.FRONTEND_URL}/api/v1/password/reset/${resetToken}`;
 
-    const message = `Hello ${user.name},\n\nYou have requested to reset your password. Please click on the following link, or paste it into your browser to complete the process:\n\n${resetUrl}\n\nIf you did not request this, please ignore this email and your password will remain unchanged.\n\nBest regards,\nYour Company`;
+    const message = getResetPasswordTemplate(user?.name, resetUrl);
 
     try {
         await sendEmail({
