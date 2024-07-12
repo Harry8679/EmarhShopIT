@@ -4,6 +4,7 @@ import ErrorHandler from '../utils/errorHandler.util.js';
 import sendToken from '../utils/sendToken.js';
 import { sendEmail } from '../utils/sendEmail.util.js';
 import { getResetPasswordTemplate } from '../utils/emailTemplate.util.js';
+import crypto from 'crypto';
 // import 
 // import User from '../models/user.model.js';
 
@@ -94,4 +95,10 @@ export const forgotPassword = asyncHandler(async (req, res, next) => {
 
         return next(new ErrorHandler(error.message, 500));
     }
+});
+
+// Reset Password => /api/v1/password/reset/:token
+export const resetPassword = asyncHandler(async (req, res) => {
+    // Hash the URL Token
+    const resetPasswordToken = crypto.createHash('sha256')
 });
