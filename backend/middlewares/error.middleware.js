@@ -28,6 +28,7 @@ export default (err, req, res, next) => {
     if (err.name === 'JsonWebTokenError') {
         const message = 'Json Web Token is oinvalid. Try again !';
         error = new ErrorHandler(message, 400);
+    }
 
     if (process.env.NODE_ENV === 'DEVELOPMENT') {
         res.status(error.statusCode).json({
