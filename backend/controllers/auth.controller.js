@@ -119,3 +119,10 @@ export const resetPassword = asyncHandler(async (req, res, next) => {
 
     sendToken(user, 200, res);
 });
+
+/*----------------- Get Current User Profile ----------------- */
+export const getUserProfile = asyncHandler(async (req, res, next) => {
+    const user = await User.findById(req?.user?._id);
+
+    res.status(200).json({ user });
+});
