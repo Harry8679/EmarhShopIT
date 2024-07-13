@@ -98,7 +98,23 @@ export const forgotPassword = asyncHandler(async (req, res, next) => {
 });
 
 // Reset Password => /api/v1/password/reset/:token
-export const resetPassword = asyncHandler(async (req, res) => {
+export const resetPassword = asyncHandler(async (req, res, next) => {
     // Hash the URL Token
-    const resetPasswordToken = crypto.createHash('sha256')
+    const resetPasswordToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
+
+    const user = await User.findOne({ resetPasswordToken, resetPasswordExpire: { $gt: Date.now() } })
+
+    if (req.body.password !== req.body.confirmPassword) {
+        return next(new ErrorHandler('Passwords do not match', 400));
+    }
+
+    // Set the new password
+    user.password = req.body.password;
+
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save();
+
+    sendToken(user, 200, res);
 });
