@@ -98,6 +98,7 @@ export const forgotPassword = asyncHandler(async (req, res, next) => {
 });
 
 // Reset Password => /api/v1/password/reset/:token
+/*----------------- Forgot Password ----------------- */
 export const resetPassword = asyncHandler(async (req, res, next) => {
     // Hash the URL Token
     const resetPasswordToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
