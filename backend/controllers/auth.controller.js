@@ -159,3 +159,10 @@ export const updateProfile = asyncHandler(async (req, res, next) => {
 
     res.status(200).json({ user })
 });
+
+/*----------------- Get All Users ----------------- */
+export const getAllUser = asyncHandler(async (req, res, next) => {
+    const users = await User.find();
+
+    res.status(200).json({ users });
+});
