@@ -1,6 +1,6 @@
 import express from 'express';
-import { forgotPassword, getUserProfile, loginUser, logout, register, resetPassword, updatePassword, updateProfile } from '../controllers/auth.controller.js';
-import { isAuthenticated } from '../middlewares/auth.middleware.js';
+import { forgotPassword, getAllUsers, getUserProfile, loginUser, logout, register, resetPassword, updatePassword, updateProfile } from '../controllers/auth.controller.js';
+import { authorizeRoles, isAuthenticated } from '../middlewares/auth.middleware.js';
 
 const authRoute = express.Router();
 
@@ -12,4 +12,6 @@ authRoute.put('/password/reset/:token', resetPassword);
 authRoute.get('/me', isAuthenticated, getUserProfile);
 authRoute.post('/me/update', isAuthenticated, updateProfile);
 authRoute.post('/password/update', isAuthenticated, updatePassword);
+
+authRoute.get('/admin/users', isAuthenticated, authorizeRoles('admin'), getAllUsers);
 export default authRoute;

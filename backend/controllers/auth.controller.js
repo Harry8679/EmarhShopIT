@@ -161,7 +161,7 @@ export const updateProfile = asyncHandler(async (req, res, next) => {
 });
 
 /*----------------- Get All Users ----------------- */
-export const getAllUser = asyncHandler(async (req, res, next) => {
+export const getAllUsers = asyncHandler(async (req, res, next) => {
     const users = await User.find();
 
     res.status(200).json({ users });
