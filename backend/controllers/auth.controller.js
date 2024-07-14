@@ -150,7 +150,7 @@ export const updatePassword = asyncHandler(async (req, res, next) => {
 export const updateProfile = asyncHandler(async (req, res, next) => {
     const newUserData = {
         name: req.body.name,
-        email: req.body.email
+        email: req.body.email,
     };
 
     const user = await User.findByIdAndUpdate(req.user._id, newUserData, {
