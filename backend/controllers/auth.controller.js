@@ -190,3 +190,18 @@ export const updateUser = asyncHandler(async (req, res, next) => {
 
     res.status(200).json({ user });
 });
+
+/*----------------- Delete User ----------------- */
+export const deleteUser = asyncHandler(async (req, res, next) => {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+        return next(new ErrorHandler(`User not found with id : ${id}`, 404));
+    }
+
+    // TODO - Remove user avatar from cloudinary
+
+    await user.deleteOne();
+
+    res.status(200).json({ success: true });
+});
