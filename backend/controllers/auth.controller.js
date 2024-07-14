@@ -166,3 +166,14 @@ export const getAllUser = asyncHandler(async (req, res, next) => {
 
     res.status(200).json({ users });
 });
+
+/*----------------- Get User Details ----------------- */
+export const getUserDetails = asyncHandler(async(req, res, next) => {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+        return next(new ErrorHandler(`User not found with id ${req.params.id}`, 404));
+    }
+    
+    res.status(200).json({ user });
+});
