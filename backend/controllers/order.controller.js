@@ -49,7 +49,7 @@ export const updateOrder = asyncHandler(async(req, res, next) => {
     const order = await Order.findById(req.params.id);
 
     if (!order) {
-        return next(new ErrorHandler('You have already delivered this order.', 400));
+        return next(new ErrorHandler('No order found with this ID.', 400));
     }
 
     if (order?.orderStatus === 'Delivered') {
