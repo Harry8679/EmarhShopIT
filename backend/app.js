@@ -5,6 +5,7 @@ import productsRoute from './routes/product.route.js';
 import authRoute from './routes/auth.route.js';
 import { connectDatabase } from './config/dbConnect.js';
 import errorMiddleware from './middlewares/error.middleware.js';
+import orderRoute from './routes/order.route.js';
 
 // Handle Uncaught exceptions
 process.on('uncaughtException', (err) => {
@@ -24,6 +25,7 @@ app.use(cookieParser());
 
 app.use('/api/v1/products', productsRoute);
 app.use('/api/v1/users', authRoute);
+app.use('/api/v1/orders', orderRoute);
 
 // Using Error Middleware
 app.use(errorMiddleware);

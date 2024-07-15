@@ -6,7 +6,7 @@ import ErrorHandler from '../utils/errorHandler.util.js';
 export const newOrder = asyncHandler(async(req, res, next) => {
     const { orderItems, shippingInfo, itemsPrice, taxAmount, shippingAmount, totalAmount, paymentMethod, paymentInfo } = req.body;
 
-    const order = await Order.create({ orderItems, shippingInfo, itemsPrice, taxAmount, shippingAmount, totalAmount, paymentMethod, paymentInfo });
+    const order = await Order.create({ orderItems, shippingInfo, itemsPrice, taxAmount, shippingAmount, totalAmount, paymentMethod, paymentInfo, user:req.user._id });
 
     res.status(200).json({ order });
 });

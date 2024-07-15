@@ -18,4 +18,5 @@ authRoute.get('/admin/users', isAuthenticated, authorizeRoles('admin'), getAllUs
 authRoute.get('/admin/users/:id', isAuthenticated, authorizeRoles('admin'), getUserDetails);
 authRoute.put('/admin/users/:id', isAuthenticated, authorizeRoles('admin'), updateUser);
 authRoute.delete('/admin/users/:id', isAuthenticated, authorizeRoles('admin'), deleteUser);
+
 export default authRoute;
