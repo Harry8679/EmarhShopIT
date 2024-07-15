@@ -52,7 +52,9 @@ export const updateOrder = asyncHandler(async(req, res, next) => {
         return next(new ErrorHandler('You have already delivered this order.', 400));
     }
 
-    
+    if (order?.orderStatus === 'Delivered') {
+        return next(new ErrorHandler('You have already delivered this order', 400));
+    }
 
     res.status(200).json({ order });
 });
