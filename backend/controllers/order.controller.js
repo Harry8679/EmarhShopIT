@@ -21,3 +21,10 @@ export const getOrderDetails = asyncHandler(async(req, res, next) => {
 
     res.status(200).json({ order });
 });
+
+/*----------------- Get Current User Orders ----------------- */
+export const myOrders = asyncHandler(async (req, res) => {
+    const orders = await Order.find({ user: req.user._id });
+
+    res.status(200).json({ orders });
+});
