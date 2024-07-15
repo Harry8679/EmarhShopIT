@@ -23,8 +23,16 @@ export const getOrderDetails = asyncHandler(async(req, res, next) => {
 });
 
 /*----------------- Get Current User Orders ----------------- */
-export const myOrders = asyncHandler(async (req, res) => {
+export const myOrders = asyncHandler(async (req, res, next) => {
+    if (!req.user) {
+        return next(new ErrorHandler('User not authenticated', 401));
+    }
+    
     const orders = await Order.find({ user: req.user._id });
 
-    res.status(200).json({ orders });
+    if (!orders) {
+        return next(new ErrorHandler('No orders found for this user', 404));
+    }
+
+    res.status(200).json({ success: true, orders });
 });
