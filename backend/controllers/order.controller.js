@@ -36,3 +36,10 @@ export const myOrders = asyncHandler(async (req, res, next) => {
 
     res.status(200).json({ success: true, orders });
 });
+
+/*----------------- Get All Orders Admin ----------------- */
+export const getAllOrders = asyncHandler(async(req, res, next) => {
+    const orders = await Order.find();
+
+    res.status(200).json({ success: true, orders });
+});
