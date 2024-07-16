@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import Order from '../models/order.model.js';
 import ErrorHandler from '../utils/errorHandler.util.js';
+import Product from '../models/product.model.js';
 
 /*----------------- Create a New Order ----------------- */
 export const newOrder = asyncHandler(async(req, res, next) => {
@@ -55,6 +56,23 @@ export const updateOrder = asyncHandler(async(req, res, next) => {
     if (order?.orderStatus === 'Delivered') {
         return next(new ErrorHandler('You have already delivered this order', 400));
     }
+
+    order?.orderItems?.forEach(async (item) => {
+        const product = await Product.findById(item?.product?.toString());
+
+        if (!product) {
+            return next(new ErrorHandler('No Product found with this ID', 404));
+        }
+
+        product.stock = product.stock - quantity;
+
+        await product.save();
+    });
+
+    order.orderStatus = req.body.status;
+    order.deliveredAt = Date.now();
+
+    res.status(200).json({ success: true });
 
     res.status(200).json({ order });
 });
