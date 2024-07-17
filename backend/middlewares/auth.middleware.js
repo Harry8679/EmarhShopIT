@@ -58,9 +58,7 @@ export const isAuthenticated = asyncHanlder(async (req, res, next) => {
             }
         });
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        // console.log(decoded);
         req.user = await User.findById(decoded.id);
-        // console.log('req.user :', req.user);
         
         if (!req.user) {
             console.log('User not found');
